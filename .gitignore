@@ -1,0 +1,11 @@
+/.vs
+/.idea
+/obj
+/Build
+/[Ll]ibrary/
+/[Ll]ogs/
+/[Tt]emp/
+/[Uu]ser[Ss]ettings/
+/*.csproj
+/*.sln
+/*.userproperties
