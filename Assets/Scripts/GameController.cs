@@ -30,6 +30,9 @@ public class GameController : MonoBehaviour
         _systems = new Systems();
         _systems.Add(new PrefabInstantiateSystem(context));
         _systems.Add(new TransformApplySystem(context));
+        _systems.Add(new DeathTrackerSystem(context));
+        _systems.Add(new FinishGameTrackerSystem(context));
+        _systems.Add(new CharacterStateApplySystem(context));
         _systems.Initialize();
     }
 
@@ -53,45 +56,6 @@ public class GameController : MonoBehaviour
         }
 
         return null;
-    }
-
-    void PlayerWon()
-    {
-        SetGameResultTextColor(WinColor);
-        gameResultText.text = "You Won";
-        Utility.SetCanvasGroupEnabled(endGameCanvasGroup, true);
-    }
-
-    void PlayerLost()
-    {
-        SetGameResultTextColor(LostColor);
-        gameResultText.text = "You Lost";
-        Utility.SetCanvasGroupEnabled(endGameCanvasGroup, true);
-    }
-
-    private void SetGameResultTextColor(string hexColor)
-    {
-        if (ColorUtility.TryParseHtmlString(hexColor, out Color newCol))
-        {
-            gameResultText.color = newCol;
-        }
-    }
-
-    bool CheckEndGame()
-    {
-        if (FirstAliveCharacter(playerCharacter) == null)
-        {
-            PlayerLost();
-            return true;
-        }
-
-        if (FirstAliveCharacter(enemyCharacter) == null)
-        {
-            PlayerWon();
-            return true;
-        }
-
-        return false;
     }
 
     void PlayerAttack()
@@ -118,7 +82,8 @@ public class GameController : MonoBehaviour
     IEnumerator GameLoop()
     {
         yield return null;
-        while (!CheckEndGame())
+        // while (!CheckEndGame())
+        while (false)
         {
             foreach (var player in playerCharacter)
             {

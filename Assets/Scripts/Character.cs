@@ -4,21 +4,6 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    public enum State
-    {
-        Idle,
-        RunningToEnemy,
-        RunningFromEnemy,
-        BeginAttack,
-        Attack,
-        BeginShoot,
-        Shoot,
-        BeginPunch,
-        Punch,
-        BeginDying,
-        Dead,
-    }
-
     public enum Weapon
     {
         Pistol,
@@ -31,7 +16,7 @@ public class Character : MonoBehaviour
     public float distanceFromEnemy;
     public Transform target;
     public TargetIndicator targetIndicator;
-    State state;
+    CharacterState _characterState;
     Animator animator;
     Vector3 originalPosition;
     Quaternion originalRotation;
@@ -42,27 +27,27 @@ public class Character : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         health = GetComponent<Health>();
         targetIndicator = GetComponentInChildren<TargetIndicator>(true);
-        state = State.Idle;
+        _characterState = CharacterState.Idle;
         originalPosition = transform.position;
         originalRotation = transform.rotation;
     }
 
     public bool IsIdle()
     {
-        return state == State.Idle;
+        return _characterState == CharacterState.Idle;
     }
 
     public bool IsDead()
     {
-        return state == State.BeginDying || state == State.Dead;
+        return _characterState == CharacterState.BeginDying || _characterState == CharacterState.Dead;
     }
 
-    public void SetState(State newState)
+    public void SetState(CharacterState newCharacterState)
     {
         if (IsDead())
             return;
 
-        state = newState;
+        _characterState = newCharacterState;
     }
 
     public void DoDamage()
@@ -72,7 +57,7 @@ public class Character : MonoBehaviour
 
         health.ApplyDamage(1.0f); // FIXME: захардкожено
         if (health.current <= 0.0f)
-            state = State.BeginDying;
+            _characterState = CharacterState.BeginDying;
     }
 
     [ContextMenu("Attack")]
@@ -87,15 +72,15 @@ public class Character : MonoBehaviour
 
         switch (weapon) {
             case Weapon.Bat:
-                state = State.RunningToEnemy;
+                _characterState = CharacterState.RunningToEnemy;
                 break;
 
             case Weapon.Fist:
-                state = State.RunningToEnemy;
+                _characterState = CharacterState.RunningToEnemy;
                 break;
 
             case Weapon.Pistol:
-                state = State.BeginShoot;
+                _characterState = CharacterState.BeginShoot;
                 break;
         }
     }
@@ -126,63 +111,63 @@ public class Character : MonoBehaviour
 
     void FixedUpdate()
     {
-        switch (state) {
-            case State.Idle:
+        switch (_characterState) {
+            case CharacterState.Idle:
                 transform.rotation = originalRotation;
                 animator.SetFloat("Speed", 0.0f);
                 break;
 
-            case State.RunningToEnemy:
+            case CharacterState.RunningToEnemy:
                 animator.SetFloat("Speed", runSpeed);
                 if (RunTowards(target.position, distanceFromEnemy)) {
                     switch (weapon) {
                         case Weapon.Bat:
-                            state = State.BeginAttack;
+                            _characterState = CharacterState.BeginAttack;
                             break;
 
                         case Weapon.Fist:
-                            state = State.BeginPunch;
+                            _characterState = CharacterState.BeginPunch;
                             break;
                     }
                 }
                 break;
 
-            case State.BeginAttack:
+            case CharacterState.BeginAttack:
                 animator.SetTrigger("MeleeAttack");
-                state = State.Attack;
+                _characterState = CharacterState.Attack;
                 break;
 
-            case State.Attack:
+            case CharacterState.Attack:
                 break;
 
-            case State.BeginShoot:
+            case CharacterState.BeginShoot:
                 animator.SetTrigger("Shoot");
-                state = State.Shoot;
+                _characterState = CharacterState.Shoot;
                 break;
 
-            case State.Shoot:
+            case CharacterState.Shoot:
                 break;
 
-            case State.BeginPunch:
+            case CharacterState.BeginPunch:
                 animator.SetTrigger("Punch");
-                state = State.Punch;
+                _characterState = CharacterState.Punch;
                 break;
 
-            case State.Punch:
+            case CharacterState.Punch:
                 break;
 
-            case State.RunningFromEnemy:
+            case CharacterState.RunningFromEnemy:
                 animator.SetFloat("Speed", runSpeed);
                 if (RunTowards(originalPosition, 0.0f))
-                    state = State.Idle;
+                    _characterState = CharacterState.Idle;
                 break;
 
-            case State.BeginDying:
+            case CharacterState.BeginDying:
                 animator.SetTrigger("Death");
-                state = State.Dead;
+                _characterState = CharacterState.Dead;
                 break;
 
-            case State.Dead:
+            case CharacterState.Dead:
                 break;
         }
     }

@@ -8,25 +8,27 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly CharacterComponent characterComponent = new CharacterComponent();
+    public CharacterComponent character { get { return (CharacterComponent)GetComponent(GameComponentsLookup.Character); } }
+    public bool hasCharacter { get { return HasComponent(GameComponentsLookup.Character); } }
 
-    public bool isCharacter {
-        get { return HasComponent(GameComponentsLookup.Character); }
-        set {
-            if (value != isCharacter) {
-                var index = GameComponentsLookup.Character;
-                if (value) {
-                    var componentPool = GetComponentPool(index);
-                    var component = componentPool.Count > 0
-                            ? componentPool.Pop()
-                            : characterComponent;
+    public void AddCharacter(CharacterType newType, CharacterState newState) {
+        var index = GameComponentsLookup.Character;
+        var component = (CharacterComponent)CreateComponent(index, typeof(CharacterComponent));
+        component.type = newType;
+        component.state = newState;
+        AddComponent(index, component);
+    }
 
-                    AddComponent(index, component);
-                } else {
-                    RemoveComponent(index);
-                }
-            }
-        }
+    public void ReplaceCharacter(CharacterType newType, CharacterState newState) {
+        var index = GameComponentsLookup.Character;
+        var component = (CharacterComponent)CreateComponent(index, typeof(CharacterComponent));
+        component.type = newType;
+        component.state = newState;
+        ReplaceComponent(index, component);
+    }
+
+    public void RemoveCharacter() {
+        RemoveComponent(GameComponentsLookup.Character);
     }
 }
 

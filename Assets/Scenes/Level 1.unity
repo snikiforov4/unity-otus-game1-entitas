@@ -573,6 +573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 8432393290777526023, guid: 7069c9812e2b61a4897267e66e5134da,
     type: 3}
+  characterType: 0
   health: 3
 --- !u!1001 &326938249
 PrefabInstance:
@@ -1587,6 +1588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 3591750979723153889, guid: 268fe3416a5e8cf4694a8632f9cb8c4d,
     type: 3}
+  characterType: 1
   health: 3
 --- !u!1001 &1190149068
 PrefabInstance:
@@ -2259,6 +2261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 3591750979723153889, guid: 10c2f798f720e614a93d929742385835,
     type: 3}
+  characterType: 1
   health: 3
 --- !u!1001 &1813444480
 PrefabInstance:
@@ -2643,6 +2646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 8432393290777526023, guid: 7069c9812e2b61a4897267e66e5134da,
     type: 3}
+  characterType: 0
   health: 3
 --- !u!1001 &2097841832
 PrefabInstance:

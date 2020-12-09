@@ -13,17 +13,17 @@ public class CharacterAnimationEvents : MonoBehaviour
 
     void ShootEnd()
     {
-        character.SetState(Character.State.Idle);
+        character.SetState(CharacterState.Idle);
     }
 
     void AttackEnd()
     {
-        character.SetState(Character.State.RunningFromEnemy);
+        character.SetState(CharacterState.RunningFromEnemy);
     }
 
     void PunchEnd()
     {
-        character.SetState(Character.State.RunningFromEnemy);
+        character.SetState(CharacterState.RunningFromEnemy);
     }
 
     void DoDamage()
