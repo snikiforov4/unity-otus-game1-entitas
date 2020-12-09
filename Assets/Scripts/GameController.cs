@@ -21,31 +21,31 @@ public class GameController : MonoBehaviour
     Character currentTarget;
     bool waitingForInput;
 
-    Systems systems;
-    
+    private Systems _systems;
+
     void Awake()
     {
         var context = Contexts.sharedInstance;
 
-        systems = new Systems();
-        systems.Add(new DeathSystem(context));
-        systems.Initialize();
+        _systems = new Systems();
+        _systems.Add(new PrefabInstantiateSystem(context));
+        _systems.Add(new TransformApplySystem(context));
+        _systems.Initialize();
     }
 
     void OnDestroy()
     {
-        systems.TearDown();
+        _systems.TearDown();
     }
 
     void Update()
     {
-        systems.Execute();
-        systems.Cleanup();
+        _systems.Execute();
+        _systems.Cleanup();
     }
     
     Character FirstAliveCharacter(Character[] characters)
     {
-        // LINQ: return enemyCharacter.FirstOrDefault(x => !x.IsDead());
         foreach (var character in characters)
         {
             if (!character.IsDead())
@@ -173,7 +173,7 @@ public class GameController : MonoBehaviour
         attackButton.onClick.AddListener(PlayerAttack);
         Utility.SetCanvasGroupEnabled(gameControlsCanvasGroup, false);
         Utility.SetCanvasGroupEnabled(endGameCanvasGroup, false);
-        StartCoroutine(GameLoop());
+        // StartCoroutine(GameLoop());
     }
 
     public void BackToMainMenu()

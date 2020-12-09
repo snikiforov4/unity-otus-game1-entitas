@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly PlayerComponent playerComponent = new PlayerComponent();
+    static readonly CharacterComponent characterComponent = new CharacterComponent();
 
-    public bool isPlayer {
-        get { return HasComponent(GameComponentsLookup.Player); }
+    public bool isCharacter {
+        get { return HasComponent(GameComponentsLookup.Character); }
         set {
-            if (value != isPlayer) {
-                var index = GameComponentsLookup.Player;
+            if (value != isCharacter) {
+                var index = GameComponentsLookup.Character;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : playerComponent;
+                            : characterComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherPlayer;
+    static Entitas.IMatcher<GameEntity> _matcherCharacter;
 
-    public static Entitas.IMatcher<GameEntity> Player {
+    public static Entitas.IMatcher<GameEntity> Character {
         get {
-            if (_matcherPlayer == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Player);
+            if (_matcherCharacter == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Character);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherPlayer = matcher;
+                _matcherCharacter = matcher;
             }
 
-            return _matcherPlayer;
+            return _matcherCharacter;
         }
     }
 }

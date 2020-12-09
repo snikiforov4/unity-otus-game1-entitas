@@ -7,7 +7,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4914080533690171834}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e0303827938f8548969f8d67e163022, type: 3}
   m_Name: 
@@ -94,6 +94,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7834085595356252756, guid: 73e1432563d8c1a48839445fb70ed3d9,
+        type: 3}
+      propertyPath: characterPrefab
+      value: 
+      objectReference: {fileID: 8432393290777526023, guid: 7069c9812e2b61a4897267e66e5134da,
+        type: 3}
     - target: {fileID: 8455690963370006717, guid: 73e1432563d8c1a48839445fb70ed3d9,
         type: 3}
       propertyPath: m_Name
@@ -128,7 +134,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400166, guid: fdfb5e1c4a1b339489c0eddebb1ab872, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.714
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 400166, guid: fdfb5e1c4a1b339489c0eddebb1ab872, type: 3}
       propertyPath: m_LocalPosition.z

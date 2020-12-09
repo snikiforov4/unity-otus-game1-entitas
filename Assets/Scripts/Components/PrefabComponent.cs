@@ -1,7 +1,7 @@
 ﻿using Entitas;
- using UnityEngine;
+using UnityEngine;
 
- public class PrefabComponent : IComponent
+public class PrefabComponent : IComponent
 {
     public GameObject prefab;
 }
