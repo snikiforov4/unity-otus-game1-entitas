@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Character : MonoBehaviour
 {
@@ -20,12 +18,10 @@ public class Character : MonoBehaviour
     Animator animator;
     Vector3 originalPosition;
     Quaternion originalRotation;
-    Health health;
 
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
-        health = GetComponent<Health>();
         targetIndicator = GetComponentInChildren<TargetIndicator>(true);
         _characterState = CharacterState.Idle;
         originalPosition = transform.position;
@@ -55,9 +51,7 @@ public class Character : MonoBehaviour
         if (IsDead())
             return;
 
-        health.ApplyDamage(1.0f); // FIXME: захардкожено
-        if (health.current <= 0.0f)
-            _characterState = CharacterState.BeginDying;
+        // todo: add DamageComponent(1.0f)
     }
 
     [ContextMenu("Attack")]

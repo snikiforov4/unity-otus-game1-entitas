@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Entitas;
 
 public class DeathTrackerSystem : ReactiveSystem<GameEntity>
@@ -26,12 +25,11 @@ public class DeathTrackerSystem : ReactiveSystem<GameEntity>
     {
         foreach (var entity in entities)
         {
-            if (entity.character.state != CharacterState.Dead 
+            if (entity.character.state != CharacterState.Dead
                 && entity.character.state != CharacterState.BeginDying
                 && entity.health.value <= 0)
             {
-                // todo Dying
-                entity.AddCharacterStateTransition(CharacterState.Dead);
+                entity.AddCharacterStateTransition(CharacterState.BeginDying);
             }
         }
     }

@@ -30,6 +30,8 @@ public class GameController : MonoBehaviour
         _systems = new Systems();
         _systems.Add(new PrefabInstantiateSystem(context));
         _systems.Add(new TransformApplySystem(context));
+        _systems.Add(new DamageApplySystem(context));
+        _systems.Add(new CharacterHealthChangeSystem(context));
         _systems.Add(new DeathTrackerSystem(context));
         _systems.Add(new FinishGameTrackerSystem(context));
         _systems.Add(new CharacterStateApplySystem(context));

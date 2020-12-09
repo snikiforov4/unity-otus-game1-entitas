@@ -10,17 +10,19 @@ public static class GameComponentsLookup {
 
     public const int Character = 0;
     public const int CharacterStateTransition = 1;
-    public const int Health = 2;
-    public const int Position = 3;
-    public const int Prefab = 4;
-    public const int Rotation = 5;
-    public const int View = 6;
+    public const int Damage = 2;
+    public const int Health = 3;
+    public const int Position = 4;
+    public const int Prefab = 5;
+    public const int Rotation = 6;
+    public const int View = 7;
 
-    public const int TotalComponents = 7;
+    public const int TotalComponents = 8;
 
     public static readonly string[] componentNames = {
         "Character",
         "CharacterStateTransition",
+        "Damage",
         "Health",
         "Position",
         "Prefab",
@@ -31,6 +33,7 @@ public static class GameComponentsLookup {
     public static readonly System.Type[] componentTypes = {
         typeof(CharacterComponent),
         typeof(CharacterStateTransitionComponent),
+        typeof(DamageComponent),
         typeof(HealthComponent),
         typeof(PositionComponent),
         typeof(PrefabComponent),

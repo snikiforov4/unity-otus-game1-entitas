@@ -1,4 +1,4 @@
-public class CharacterUtils
+public static class CharacterUtils
 {
     public static CharacterState GetCharacterState(GameEntity character)
     {
