@@ -13,7 +13,6 @@ public class GameController : MonoBehaviour
 
     public CanvasGroup gameControlsCanvasGroup;
     public CanvasGroup endGameCanvasGroup;
-    public CanvasGroup allInGameUICanvasGroup;
     public Button attackButton;
     public TextMeshProUGUI gameResultText;
     public Character[] playerCharacter;
@@ -143,29 +142,8 @@ public class GameController : MonoBehaviour
         // StartCoroutine(GameLoop());
     }
 
-    public void BackToMainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    public void OpenMenu()
-    {
-        ShowMenu(true);
-    }
-    
-    public void CloseMenu()
-    {
-        ShowMenu(false);
-    }
-
     public void RestartGame()
     {
-        var scene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(scene.name);
-    }
-    
-    private void ShowMenu(bool show)
-    {
-        Utility.SetCanvasGroupEnabled(allInGameUICanvasGroup, !show);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
