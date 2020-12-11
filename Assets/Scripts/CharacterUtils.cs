@@ -6,4 +6,15 @@ public static class CharacterUtils
             ? character.characterStateTransition.value
             : character.character.state;
     }
+
+    public static bool IsNotDead(GameEntity character)
+    {
+        return !IsDead(character);
+    }
+
+    public static bool IsDead(GameEntity character)
+    {
+        var characterState = GetCharacterState(character);
+        return characterState == CharacterState.Dead || characterState == CharacterState.BeginDying;
+    }
 }

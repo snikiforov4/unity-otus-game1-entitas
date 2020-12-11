@@ -6,13 +6,14 @@ using UnityEngine;
 
 public class FinishGameTrackerSystem : ReactiveSystem<GameEntity>
 {
-    private Contexts _contexts;
+    private const string WinColor = "#97FF88";
+    private const string LostColor = "#C3000A";
+
     private readonly IGroup<GameEntity> _allCharacters;
 
     public FinishGameTrackerSystem(Contexts contexts)
         : base(contexts.game)
     {
-        _contexts = contexts;
         _allCharacters = contexts.game.GetGroup(GameMatcher.Character);
     }
 

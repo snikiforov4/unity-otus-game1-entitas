@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Entitas;
 
-public class CharacterStateApplySystem : ReactiveSystem<GameEntity>
+public class CharacterNewStateApplySystem : ReactiveSystem<GameEntity>
 {
     private Contexts _contexts;
 
-    public CharacterStateApplySystem(Contexts contexts)
+    public CharacterNewStateApplySystem(Contexts contexts)
         : base(contexts.game)
     {
         _contexts = contexts;

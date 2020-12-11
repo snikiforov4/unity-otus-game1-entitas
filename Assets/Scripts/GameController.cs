@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Entitas;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    private const string WinColor = "#97FF88";
-    private const string LostColor = "#C3000A";
-
-    public CanvasGroup gameControlsCanvasGroup;
-    public CanvasGroup endGameCanvasGroup;
-    public Button attackButton;
-    public TextMeshProUGUI gameResultText;
     public Character[] playerCharacter;
     public Character[] enemyCharacter;
     Character currentTarget;
@@ -30,10 +19,12 @@ public class GameController : MonoBehaviour
         _systems.Add(new PrefabInstantiateSystem(context));
         _systems.Add(new TransformApplySystem(context));
         _systems.Add(new DamageApplySystem(context));
-        _systems.Add(new CharacterHealthChangeSystem(context));
+        _systems.Add(new CharacterHealthIndicatorSystem(context));
+        _systems.Add(new TargetSwitchSystem(context));
+        _systems.Add(new CharacterTargetIndicatorSystem(context));
         _systems.Add(new DeathTrackerSystem(context));
         _systems.Add(new FinishGameTrackerSystem(context));
-        _systems.Add(new CharacterStateApplySystem(context));
+        _systems.Add(new CharacterNewStateApplySystem(context));
         _systems.Initialize();
     }
 
@@ -58,33 +49,12 @@ public class GameController : MonoBehaviour
 
         return null;
     }
-
-    void PlayerAttack()
-    {
-        waitingForInput = false;
-    }
-
-    public void NextTarget()
-    {
-        int index = Array.IndexOf(enemyCharacter, currentTarget);
-        for (int i = 1; i < enemyCharacter.Length; i++)
-        {
-            int next = (index + i) % enemyCharacter.Length;
-            if (!enemyCharacter[next].IsDead())
-            {
-                currentTarget.targetIndicator.gameObject.SetActive(false);
-                currentTarget = enemyCharacter[next];
-                currentTarget.targetIndicator.gameObject.SetActive(true);
-                return;
-            }
-        }
-    }
-
+    
     IEnumerator GameLoop()
     {
         yield return null;
         // while (!CheckEndGame())
-        while (false)
+        while (true)
         {
             foreach (var player in playerCharacter)
             {
@@ -95,13 +65,13 @@ public class GameController : MonoBehaviour
                         break;
 
                     currentTarget.targetIndicator.gameObject.SetActive(true);
-                    Utility.SetCanvasGroupEnabled(gameControlsCanvasGroup, true);
+                    // Utility.SetCanvasGroupEnabled(gameControlsCanvasGroup, true);
 
                     waitingForInput = true;
                     while (waitingForInput)
                         yield return null;
 
-                    Utility.SetCanvasGroupEnabled(gameControlsCanvasGroup, false);
+                    // Utility.SetCanvasGroupEnabled(gameControlsCanvasGroup, false);
                     currentTarget.targetIndicator.gameObject.SetActive(false);
 
                     player.target = currentTarget.transform;
@@ -136,14 +106,6 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        attackButton.onClick.AddListener(PlayerAttack);
-        Utility.SetCanvasGroupEnabled(gameControlsCanvasGroup, false);
-        Utility.SetCanvasGroupEnabled(endGameCanvasGroup, false);
         // StartCoroutine(GameLoop());
-    }
-
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

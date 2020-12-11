@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Entitas;
 
-public class CharacterHealthChangeSystem : ReactiveSystem<GameEntity>
+public class CharacterHealthIndicatorSystem : ReactiveSystem<GameEntity>
 {
     private readonly Contexts _contexts;
 
-    public CharacterHealthChangeSystem(Contexts contexts)
+    public CharacterHealthIndicatorSystem(Contexts contexts)
         : base(contexts.game)
     {
         _contexts = contexts;
