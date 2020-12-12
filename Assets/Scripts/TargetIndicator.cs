@@ -2,8 +2,8 @@
 
 public class TargetIndicator : MonoBehaviour
 {
-    void Start()
+    public void SetActive(bool active)
     {
-        gameObject.SetActive(false);
+        gameObject.SetActive(active);
     }
 }

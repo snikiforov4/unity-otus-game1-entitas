@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Entitas;
-using Object = UnityEngine.Object;
+using UnityEngine;
 
 public class PrefabInstantiateSystem : ReactiveSystem<GameEntity>
 {

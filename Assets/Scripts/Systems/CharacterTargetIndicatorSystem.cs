@@ -10,8 +10,17 @@ public class CharacterTargetIndicatorSystem : ReactiveSystem<GameEntity>
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
     {
-        return context.CreateCollector(new TriggerOnEvent<GameEntity>(GameMatcher.CurrentTarget,
-            GroupEvent.AddedOrRemoved));
+        return new Collector<GameEntity>(
+            new[]
+            {
+                context.GetGroup(GameMatcher.View),
+                context.GetGroup(GameMatcher.CurrentTarget),
+            }, new[]
+            {
+                GroupEvent.Added,
+                GroupEvent.AddedOrRemoved,
+            }
+        );
     }
 
     protected override bool Filter(GameEntity entity)
@@ -24,7 +33,7 @@ public class CharacterTargetIndicatorSystem : ReactiveSystem<GameEntity>
         foreach (var e in entities)
         {
             var targetIndicator = e.view.gameObject.GetComponentInChildren<TargetIndicator>(true);
-            targetIndicator.gameObject.SetActive(e.isCurrentTarget);
+            targetIndicator.SetActive(e.isCurrentTarget);
         }
     }
 }

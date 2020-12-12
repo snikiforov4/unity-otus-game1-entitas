@@ -6,5 +6,6 @@ public class GameStateEntity : AbstractEntity
         base.Start();
         entity.isGameState = true;
         entity.isWaitingUserInput = true;
+        entity.isTargetSwitch = true;
     }
 }
