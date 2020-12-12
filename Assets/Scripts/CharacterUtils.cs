@@ -17,4 +17,9 @@ public static class CharacterUtils
         var characterState = GetCharacterState(character);
         return characterState == CharacterState.Dead || characterState == CharacterState.BeginDying;
     }
+
+    public static bool IsIdle(GameEntity character)
+    {
+        return GetCharacterState(character) == CharacterState.Idle;
+    }
 }

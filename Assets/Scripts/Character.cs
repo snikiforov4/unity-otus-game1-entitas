@@ -2,87 +2,105 @@
 
 public class Character : MonoBehaviour
 {
-    public enum Weapon
-    {
-        Pistol,
-        Bat,
-        Fist,
-    }
+    private const float RunSpeed = 0.1f;
+    private const float DistanceFromEnemy = 0.5f;
 
-    public Weapon weapon;
-    public float runSpeed;
-    public float distanceFromEnemy;
     public Transform target;
-    public TargetIndicator targetIndicator;
-    CharacterState _characterState;
-    Animator animator;
-    Vector3 originalPosition;
-    Quaternion originalRotation;
+    private Animator _animator;
+    private Vector3 _originalPosition;
+    private Quaternion _originalRotation;
+    private GameEntity entity;
 
     void Start()
     {
-        animator = GetComponentInChildren<Animator>();
-        targetIndicator = GetComponentInChildren<TargetIndicator>(true);
-        _characterState = CharacterState.Idle;
-        originalPosition = transform.position;
-        originalRotation = transform.rotation;
+        _animator = GetComponentInChildren<Animator>();
+        _originalPosition = transform.position;
+        _originalRotation = transform.rotation;
+        entity = GetEntity();
     }
 
-    public bool IsIdle()
+    public GameEntity GetEntity()
     {
-        return _characterState == CharacterState.Idle;
+        return GetComponent<EntitasEntity>().entity;
     }
 
-    public bool IsDead()
+    void FixedUpdate()
     {
-        return _characterState == CharacterState.BeginDying || _characterState == CharacterState.Dead;
-    }
-
-    public void SetState(CharacterState newCharacterState)
-    {
-        if (IsDead())
-            return;
-
-        _characterState = newCharacterState;
-    }
-
-    public void DoDamage()
-    {
-        if (IsDead())
-            return;
-
-        // todo: add DamageComponent(1.0f)
-    }
-
-    [ContextMenu("Attack")]
-    public void AttackEnemy()
-    {
-        if (IsDead())
-            return;
-
-        Character targetCharacter = target.GetComponent<Character>();
-        if (targetCharacter.IsDead())
-            return;
-
-        switch (weapon) {
-            case Weapon.Bat:
-                _characterState = CharacterState.RunningToEnemy;
+        switch (entity.character.state)
+        {
+            case CharacterState.Idle:
+                transform.rotation = _originalRotation;
+                _animator.SetFloat("Speed", 0.0f);
                 break;
 
-            case Weapon.Fist:
-                _characterState = CharacterState.RunningToEnemy;
+            case CharacterState.RunningToEnemy:
+                _animator.SetFloat("Speed", RunSpeed);
+                if (RunTowards(target.position, DistanceFromEnemy))
+                {
+                    switch (entity.character.weapon)
+                    {
+                        case Weapon.Bat:
+                            UpdateState(CharacterState.BeginAttack);
+                            break;
+
+                        case Weapon.Fist:
+                            UpdateState(CharacterState.BeginPunch);
+                            break;
+                    }
+                }
+
                 break;
 
-            case Weapon.Pistol:
-                _characterState = CharacterState.BeginShoot;
+            case CharacterState.BeginAttack:
+                _animator.SetTrigger("MeleeAttack");
+                UpdateState(CharacterState.Attack);
+                break;
+
+            case CharacterState.Attack:
+                break;
+
+            case CharacterState.BeginShoot:
+                _animator.SetTrigger("Shoot");
+                UpdateState(CharacterState.Shoot);
+                break;
+
+            case CharacterState.Shoot:
+                break;
+
+            case CharacterState.BeginPunch:
+                _animator.SetTrigger("Punch");
+                UpdateState(CharacterState.Punch);
+                break;
+
+            case CharacterState.Punch:
+                break;
+
+            case CharacterState.RunningFromEnemy:
+                _animator.SetFloat("Speed", RunSpeed);
+                if (RunTowards(_originalPosition, 0.0f))
+                    UpdateState(CharacterState.Idle);
+                break;
+
+            case CharacterState.BeginDying:
+                _animator.SetTrigger("Death");
+                UpdateState(CharacterState.Dead);
+                break;
+
+            case CharacterState.Dead:
                 break;
         }
     }
 
-    bool RunTowards(Vector3 targetPosition, float distanceFromTarget)
+    private void UpdateState(CharacterState state)
+    {
+        entity.AddCharacterStateTransition(state);
+    }
+
+    private bool RunTowards(Vector3 targetPosition, float distanceFromTarget)
     {
         Vector3 distance = targetPosition - transform.position;
-        if (distance.magnitude < 0.00001f) {
+        if (distance.magnitude < 0.00001f)
+        {
             transform.position = targetPosition;
             return true;
         }
@@ -93,76 +111,14 @@ public class Character : MonoBehaviour
         targetPosition -= direction * distanceFromTarget;
         distance = (targetPosition - transform.position);
 
-        Vector3 step = direction * runSpeed;
-        if (step.magnitude < distance.magnitude) {
+        Vector3 step = direction * RunSpeed;
+        if (step.magnitude < distance.magnitude)
+        {
             transform.position += step;
             return false;
         }
 
         transform.position = targetPosition;
         return true;
-    }
-
-    void FixedUpdate()
-    {
-        switch (_characterState) {
-            case CharacterState.Idle:
-                transform.rotation = originalRotation;
-                animator.SetFloat("Speed", 0.0f);
-                break;
-
-            case CharacterState.RunningToEnemy:
-                animator.SetFloat("Speed", runSpeed);
-                if (RunTowards(target.position, distanceFromEnemy)) {
-                    switch (weapon) {
-                        case Weapon.Bat:
-                            _characterState = CharacterState.BeginAttack;
-                            break;
-
-                        case Weapon.Fist:
-                            _characterState = CharacterState.BeginPunch;
-                            break;
-                    }
-                }
-                break;
-
-            case CharacterState.BeginAttack:
-                animator.SetTrigger("MeleeAttack");
-                _characterState = CharacterState.Attack;
-                break;
-
-            case CharacterState.Attack:
-                break;
-
-            case CharacterState.BeginShoot:
-                animator.SetTrigger("Shoot");
-                _characterState = CharacterState.Shoot;
-                break;
-
-            case CharacterState.Shoot:
-                break;
-
-            case CharacterState.BeginPunch:
-                animator.SetTrigger("Punch");
-                _characterState = CharacterState.Punch;
-                break;
-
-            case CharacterState.Punch:
-                break;
-
-            case CharacterState.RunningFromEnemy:
-                animator.SetFloat("Speed", runSpeed);
-                if (RunTowards(originalPosition, 0.0f))
-                    _characterState = CharacterState.Idle;
-                break;
-
-            case CharacterState.BeginDying:
-                animator.SetTrigger("Death");
-                _characterState = CharacterState.Dead;
-                break;
-
-            case CharacterState.Dead:
-                break;
-        }
     }
 }

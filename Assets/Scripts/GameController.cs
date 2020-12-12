@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
         _systems = new Systems();
         _systems.Add(new PrefabInstantiateSystem(context));
         _systems.Add(new TransformApplySystem(context));
+        _systems.Add(new HitTrackerSystem(context));
         _systems.Add(new DamageApplySystem(context));
         _systems.Add(new CharacterHealthIndicatorSystem(context));
         _systems.Add(new TargetSwitchSystem(context));
@@ -38,18 +39,18 @@ public class GameController : MonoBehaviour
         _systems.Execute();
         _systems.Cleanup();
     }
-    
-    Character FirstAliveCharacter(Character[] characters)
+
+    private Character FirstAliveCharacter(Character[] characters)
     {
         foreach (var character in characters)
         {
-            if (!character.IsDead())
+            if (!CharacterUtils.IsDead(character.GetEntity()))
                 return character;
         }
 
         return null;
     }
-    
+
     IEnumerator GameLoop()
     {
         yield return null;
@@ -58,13 +59,13 @@ public class GameController : MonoBehaviour
         {
             foreach (var player in playerCharacter)
             {
-                if (!player.IsDead())
+                if (!CharacterUtils.IsDead(player.GetEntity()))
                 {
                     currentTarget = FirstAliveCharacter(enemyCharacter);
                     if (currentTarget == null)
                         break;
 
-                    currentTarget.targetIndicator.gameObject.SetActive(true);
+                    // currentTarget.targetIndicator.gameObject.SetActive(true);
                     // Utility.SetCanvasGroupEnabled(gameControlsCanvasGroup, true);
 
                     waitingForInput = true;
@@ -72,12 +73,12 @@ public class GameController : MonoBehaviour
                         yield return null;
 
                     // Utility.SetCanvasGroupEnabled(gameControlsCanvasGroup, false);
-                    currentTarget.targetIndicator.gameObject.SetActive(false);
+                    // currentTarget.targetIndicator.gameObject.SetActive(false);
 
                     player.target = currentTarget.transform;
-                    player.AttackEnemy();
+                    AttackEnemy(player);
 
-                    while (!player.IsIdle())
+                    while (!CharacterUtils.IsIdle(player.GetEntity()))
                         yield return null;
 
                     break;
@@ -86,16 +87,16 @@ public class GameController : MonoBehaviour
 
             foreach (var enemy in enemyCharacter)
             {
-                if (!enemy.IsDead())
+                if (!CharacterUtils.IsDead(enemy.GetEntity()))
                 {
                     Character target = FirstAliveCharacter(playerCharacter);
                     if (target == null)
                         break;
 
                     enemy.target = target.transform;
-                    enemy.AttackEnemy();
+                    AttackEnemy(enemy);
 
-                    while (!enemy.IsIdle())
+                    while (!CharacterUtils.IsIdle(enemy.GetEntity()))
                         yield return null;
 
                     break;
@@ -104,8 +105,32 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void Start()
+    private void AttackEnemy(Character character)
     {
-        // StartCoroutine(GameLoop());
+        var entity = character.GetEntity();
+        if (CharacterUtils.IsDead(entity))
+            return;
+
+        if (CharacterUtils.IsDead(GetTarget()))
+            return;
+
+        switch (entity.character.weapon)
+        {
+            case Weapon.Bat:
+            case Weapon.Fist:
+                entity.AddCharacterStateTransition(CharacterState.RunningToEnemy);
+                break;
+
+            case Weapon.Pistol:
+                entity.AddCharacterStateTransition(CharacterState.BeginShoot);
+                break;
+        }
     }
+    
+    private GameEntity GetTarget()
+    {
+        // todo implement me
+        return null;
+    }
+    
 }

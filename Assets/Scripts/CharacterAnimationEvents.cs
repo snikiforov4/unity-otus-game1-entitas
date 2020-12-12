@@ -1,34 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CharacterAnimationEvents : MonoBehaviour
 {
-    Character character;
+    private GameEntity _entity;
 
     void Start()
     {
-        character = GetComponentInParent<Character>();
+        _entity = GetComponent<EntitasEntity>().entity;
     }
 
     void ShootEnd()
     {
-        character.SetState(CharacterState.Idle);
+        _entity.AddCharacterStateTransition(CharacterState.Idle);
     }
 
     void AttackEnd()
     {
-        character.SetState(CharacterState.RunningFromEnemy);
+        _entity.AddCharacterStateTransition(CharacterState.RunningFromEnemy);
     }
 
-    void PunchEnd()
+    void Damage()
     {
-        character.SetState(CharacterState.RunningFromEnemy);
-    }
-
-    void DoDamage()
-    {
-        Character targetCharacter = character.target.GetComponent<Character>();
-        targetCharacter.DoDamage();
+        _entity.isCharacterHit = true;
     }
 }
