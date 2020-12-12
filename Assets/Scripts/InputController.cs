@@ -23,7 +23,7 @@ public class InputController : MonoBehaviour
 
     private static void PlayerAttack()
     {
-        GetGameStateEntity().isWaitingUserInput = false;
+        GetGameStateEntity().ReplaceGameState(GameState.AfterUserPressAttack);
     }
 
     private static void NextTarget()

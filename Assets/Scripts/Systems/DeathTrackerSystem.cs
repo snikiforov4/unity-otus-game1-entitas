@@ -3,12 +3,9 @@ using Entitas;
 
 public class DeathTrackerSystem : ReactiveSystem<GameEntity>
 {
-    private Contexts _contexts;
-
     public DeathTrackerSystem(Contexts contexts)
         : base(contexts.game)
     {
-        _contexts = contexts;
     }
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
@@ -25,9 +22,7 @@ public class DeathTrackerSystem : ReactiveSystem<GameEntity>
     {
         foreach (var entity in entities)
         {
-            if (entity.character.state != CharacterState.Dead
-                && entity.character.state != CharacterState.BeginDying
-                && entity.health.value <= 0)
+            if (CharacterUtils.IsNotDead(entity) && entity.health.value <= 0)
             {
                 entity.AddCharacterStateTransition(CharacterState.BeginDying);
             }

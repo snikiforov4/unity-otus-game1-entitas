@@ -6,7 +6,7 @@ public class CharacterAnimationEvents : MonoBehaviour
 
     void Start()
     {
-        _entity = GetComponent<EntitasEntity>().entity;
+        _entity = GetComponentInParent<EntitasEntity>()?.entity;
     }
 
     void ShootEnd()

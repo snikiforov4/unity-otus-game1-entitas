@@ -9,19 +9,30 @@
 public partial class GameContext {
 
     public GameEntity gameStateEntity { get { return GetGroup(GameMatcher.GameState).GetSingleEntity(); } }
+    public GameStateComponent gameState { get { return gameStateEntity.gameState; } }
+    public bool hasGameState { get { return gameStateEntity != null; } }
 
-    public bool isGameState {
-        get { return gameStateEntity != null; }
-        set {
-            var entity = gameStateEntity;
-            if (value != (entity != null)) {
-                if (value) {
-                    CreateEntity().isGameState = true;
-                } else {
-                    entity.Destroy();
-                }
-            }
+    public GameEntity SetGameState(GameState newState) {
+        if (hasGameState) {
+            throw new Entitas.EntitasException("Could not set GameState!\n" + this + " already has an entity with GameStateComponent!",
+                "You should check if the context already has a gameStateEntity before setting it or use context.ReplaceGameState().");
         }
+        var entity = CreateEntity();
+        entity.AddGameState(newState);
+        return entity;
+    }
+
+    public void ReplaceGameState(GameState newState) {
+        var entity = gameStateEntity;
+        if (entity == null) {
+            entity = SetGameState(newState);
+        } else {
+            entity.ReplaceGameState(newState);
+        }
+    }
+
+    public void RemoveGameState() {
+        gameStateEntity.Destroy();
     }
 }
 
@@ -35,25 +46,25 @@ public partial class GameContext {
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly GameStateComponent gameStateComponent = new GameStateComponent();
+    public GameStateComponent gameState { get { return (GameStateComponent)GetComponent(GameComponentsLookup.GameState); } }
+    public bool hasGameState { get { return HasComponent(GameComponentsLookup.GameState); } }
 
-    public bool isGameState {
-        get { return HasComponent(GameComponentsLookup.GameState); }
-        set {
-            if (value != isGameState) {
-                var index = GameComponentsLookup.GameState;
-                if (value) {
-                    var componentPool = GetComponentPool(index);
-                    var component = componentPool.Count > 0
-                            ? componentPool.Pop()
-                            : gameStateComponent;
+    public void AddGameState(GameState newState) {
+        var index = GameComponentsLookup.GameState;
+        var component = (GameStateComponent)CreateComponent(index, typeof(GameStateComponent));
+        component.state = newState;
+        AddComponent(index, component);
+    }
 
-                    AddComponent(index, component);
-                } else {
-                    RemoveComponent(index);
-                }
-            }
-        }
+    public void ReplaceGameState(GameState newState) {
+        var index = GameComponentsLookup.GameState;
+        var component = (GameStateComponent)CreateComponent(index, typeof(GameStateComponent));
+        component.state = newState;
+        ReplaceComponent(index, component);
+    }
+
+    public void RemoveGameState() {
+        RemoveComponent(GameComponentsLookup.GameState);
     }
 }
 

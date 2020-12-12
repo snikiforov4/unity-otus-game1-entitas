@@ -10,6 +10,8 @@ public class CharacterEntity : AbstractEntity
     protected override void Start()
     {
         base.Start();
+        entity.AddOriginalPosition(transform.position);
+        entity.AddOriginalRotation(transform.rotation);
         entity.AddPosition(transform.position);
         entity.AddRotation(transform.rotation);
         entity.AddCharacter(characterType, CharacterState.Idle, weapon);

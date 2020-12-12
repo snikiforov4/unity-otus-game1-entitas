@@ -15,14 +15,18 @@ public static class GameComponentsLookup {
     public const int Damage = 4;
     public const int GameState = 5;
     public const int Health = 6;
-    public const int Position = 7;
-    public const int Prefab = 8;
-    public const int Rotation = 9;
-    public const int TargetSwitch = 10;
-    public const int View = 11;
-    public const int WaitingUserInput = 12;
+    public const int OriginalPosition = 7;
+    public const int OriginalRotation = 8;
+    public const int Position = 9;
+    public const int Prefab = 10;
+    public const int ReadyToAttack = 11;
+    public const int Rotation = 12;
+    public const int Target = 13;
+    public const int TargetSwitch = 14;
+    public const int View = 15;
+    public const int WaitingUserInput = 16;
 
-    public const int TotalComponents = 13;
+    public const int TotalComponents = 17;
 
     public static readonly string[] componentNames = {
         "Character",
@@ -32,9 +36,13 @@ public static class GameComponentsLookup {
         "Damage",
         "GameState",
         "Health",
+        "OriginalPosition",
+        "OriginalRotation",
         "Position",
         "Prefab",
+        "ReadyToAttack",
         "Rotation",
+        "Target",
         "TargetSwitch",
         "View",
         "WaitingUserInput"
@@ -48,9 +56,13 @@ public static class GameComponentsLookup {
         typeof(DamageComponent),
         typeof(GameStateComponent),
         typeof(HealthComponent),
+        typeof(OriginalPositionComponent),
+        typeof(OriginalRotationComponent),
         typeof(PositionComponent),
         typeof(PrefabComponent),
+        typeof(ReadyToAttackComponent),
         typeof(RotationComponent),
+        typeof(TargetComponent),
         typeof(TargetSwitchComponent),
         typeof(ViewComponent),
         typeof(WaitingUserInputComponent)

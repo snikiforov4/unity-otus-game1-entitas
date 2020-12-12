@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Entitas;
 using UnityEditor;
 
@@ -21,31 +20,25 @@ public class TargetSwitchSystem : ReactiveSystem<GameEntity>
 
     protected override bool Filter(GameEntity entity)
     {
-        return entity.isGameState && entity.isTargetSwitch;
+        return entity.hasGameState && entity.isTargetSwitch;
     }
 
     protected override void Execute(List<GameEntity> entities)
     {
         entities.ForEach(e => e.isTargetSwitch = false);
-        var enemies = FindAllBadGuys();
+        var enemies = CharacterUtils.FindAll(_allCharacters.AsEnumerable(), CharacterType.BadGuy);
+        
+        var curTargetIdx = enemies.FindIndex(entity => entity.isCurrentTarget);
+        enemies.ForEach(entity => entity.isCurrentTarget = false);
 
-        var curTargetIdx = ArrayUtility.FindIndex(enemies, entity => entity.isCurrentTarget);
-        Array.ForEach(enemies, entity => entity.isCurrentTarget = false);
-
-        for (int i = 1; i < enemies.Length; i++)
+        for (int i = 1; i < enemies.Count; i++)
         {
-            var nextEnemy = enemies[(curTargetIdx + i) % enemies.Length];
+            var nextEnemy = enemies[(curTargetIdx + i) % enemies.Count];
             if (CharacterUtils.IsNotDead(nextEnemy))
             {
                 nextEnemy.isCurrentTarget = true;
                 return;
             }
         }
-    }
-
-    private GameEntity[] FindAllBadGuys()
-    {
-        return Array.FindAll(_allCharacters.GetEntities(),
-            character => character.character.type == CharacterType.BadGuy);
     }
 }
