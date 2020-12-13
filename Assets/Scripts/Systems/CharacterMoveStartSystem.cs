@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Entitas;
 
-public class CharacterRoundMoveStarterSystem : ReactiveSystem<GameEntity>
+public class CharacterMoveStartSystem : ReactiveSystem<GameEntity>
 {
-    public CharacterRoundMoveStarterSystem(Contexts contexts)
+    public CharacterMoveStartSystem(Contexts contexts)
         : base(contexts.game)
     {
     }

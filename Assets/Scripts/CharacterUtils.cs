@@ -33,6 +33,16 @@ public static class CharacterUtils
     {
         return characters.Where(e => e.character.type == type).ToList();
     }
+ 
+    public static List<GameEntity> FindBadGuys(IEnumerable<GameEntity> characters)
+    {
+        return characters.AsEnumerable().Where(e => e.character.type == CharacterType.BadGuy).ToList();
+    }
+ 
+    public static List<GameEntity> FindGoodGuys(IEnumerable<GameEntity> characters)
+    {
+        return characters.AsEnumerable().Where(e => e.character.type == CharacterType.GoodGuy).ToList();
+    }
 
     public static CharacterType GetOppositeCharacterType(CharacterType type)
     {

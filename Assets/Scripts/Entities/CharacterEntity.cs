@@ -18,6 +18,7 @@ public class CharacterEntity : AbstractEntity
         entity.AddCharacterState(CharacterState.Idle);
         entity.AddPrefab(characterPrefab);
         entity.AddHealth(health);
+        entity.isMoved = false;
         entity.isCurrentTarget = false;
     }
 }

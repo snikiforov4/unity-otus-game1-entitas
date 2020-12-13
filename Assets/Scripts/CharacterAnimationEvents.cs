@@ -11,7 +11,7 @@ public class CharacterAnimationEvents : MonoBehaviour
 
     void ShootEnd()
     {
-        _entity.ReplaceCharacterState(CharacterState.Idle);
+        _entity.ReplaceCharacterState(CharacterState.ShootEnd);
     }
 
     void AttackEnd()

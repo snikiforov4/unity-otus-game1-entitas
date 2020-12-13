@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly ReadyToAttackComponent readyToAttackComponent = new ReadyToAttackComponent();
+    static readonly MovedComponent movedComponent = new MovedComponent();
 
-    public bool isReadyToAttack {
-        get { return HasComponent(GameComponentsLookup.ReadyToAttack); }
+    public bool isMoved {
+        get { return HasComponent(GameComponentsLookup.Moved); }
         set {
-            if (value != isReadyToAttack) {
-                var index = GameComponentsLookup.ReadyToAttack;
+            if (value != isMoved) {
+                var index = GameComponentsLookup.Moved;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : readyToAttackComponent;
+                            : movedComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherReadyToAttack;
+    static Entitas.IMatcher<GameEntity> _matcherMoved;
 
-    public static Entitas.IMatcher<GameEntity> ReadyToAttack {
+    public static Entitas.IMatcher<GameEntity> Moved {
         get {
-            if (_matcherReadyToAttack == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ReadyToAttack);
+            if (_matcherMoved == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Moved);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherReadyToAttack = matcher;
+                _matcherMoved = matcher;
             }
 
-            return _matcherReadyToAttack;
+            return _matcherMoved;
         }
     }
 }

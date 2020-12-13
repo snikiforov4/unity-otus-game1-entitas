@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Entitas;
 using UnityEngine;
 
-public class FinishGameTrackerSystem : ReactiveSystem<GameEntity>
+public class GameOverTrackerSystem : ReactiveSystem<GameEntity>
 {
     private const string WinColor = "#97FF88";
     private const string LostColor = "#C3000A";
 
     private readonly IGroup<GameEntity> _allCharacters;
 
-    public FinishGameTrackerSystem(Contexts contexts)
+    public GameOverTrackerSystem(Contexts contexts)
         : base(contexts.game)
     {
         _allCharacters = contexts.game.GetGroup(GameMatcher.Character);
@@ -19,32 +18,26 @@ public class FinishGameTrackerSystem : ReactiveSystem<GameEntity>
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
     {
-        return context.CreateCollector(new TriggerOnEvent<GameEntity>(
-            GameMatcher.CharacterState, GroupEvent.AddedOrRemoved));
+        return context.CreateCollector(GameMatcher.GameState);
     }
 
     protected override bool Filter(GameEntity entity)
     {
-        return entity.hasCharacter && entity.hasCharacterState;
+        return entity.hasGameState && entity.gameState.state == GameState.GameOver;
     }
 
     protected override void Execute(List<GameEntity> entities)
     {
-        if (!HasAliveCharacters(FindAllCharacters(CharacterType.GoodGuy)))
+        if (!HasAliveCharacters(CharacterUtils.FindAll(_allCharacters.AsEnumerable(), CharacterType.GoodGuy)))
         {
             PlayerLost();
             return;
         }
 
-        if (!HasAliveCharacters(FindAllCharacters(CharacterType.BadGuy)))
+        if (!HasAliveCharacters(CharacterUtils.FindAll(_allCharacters.AsEnumerable(), CharacterType.BadGuy)))
         {
             PlayerWon();
         }
-    }
-
-    private ICollection<GameEntity> FindAllCharacters(CharacterType characterType)
-    {
-        return Array.FindAll(_allCharacters.GetEntities(), character => character.character.type == characterType);
     }
 
     private bool HasAliveCharacters(ICollection<GameEntity> characters)
@@ -54,7 +47,7 @@ public class FinishGameTrackerSystem : ReactiveSystem<GameEntity>
 
     void PlayerWon()
     {
-        Debug.Log("Lost");
+        Debug.Log("Won");
         // SetGameResultTextColor(WinColor);
         // gameResultText.text = "You Won";
         // Utility.SetCanvasGroupEnabled(endGameCanvasGroup, true);

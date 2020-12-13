@@ -8,27 +8,31 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int Character = 0;
-    public const int CharacterHit = 1;
-    public const int CharacterState = 2;
-    public const int CurrentTarget = 3;
-    public const int Damage = 4;
-    public const int GameState = 5;
-    public const int Health = 6;
-    public const int OriginalPosition = 7;
-    public const int OriginalRotation = 8;
-    public const int Position = 9;
-    public const int Prefab = 10;
-    public const int ReadyToAttack = 11;
-    public const int Rotation = 12;
-    public const int Target = 13;
-    public const int TargetSwitch = 14;
-    public const int View = 15;
-    public const int WaitingUserInput = 16;
+    public const int ActiveCharacter = 0;
+    public const int Character = 1;
+    public const int CharacterHit = 2;
+    public const int CharacterState = 3;
+    public const int CurrentTarget = 4;
+    public const int Damage = 5;
+    public const int GameState = 6;
+    public const int Health = 7;
+    public const int Moved = 8;
+    public const int OriginalPosition = 9;
+    public const int OriginalRotation = 10;
+    public const int Position = 11;
+    public const int Prefab = 12;
+    public const int ReadyToAttack = 13;
+    public const int Rotation = 14;
+    public const int Target = 15;
+    public const int TargetSwitch = 16;
+    public const int UI = 17;
+    public const int UserInput = 18;
+    public const int View = 19;
 
-    public const int TotalComponents = 17;
+    public const int TotalComponents = 20;
 
     public static readonly string[] componentNames = {
+        "ActiveCharacter",
         "Character",
         "CharacterHit",
         "CharacterState",
@@ -36,6 +40,7 @@ public static class GameComponentsLookup {
         "Damage",
         "GameState",
         "Health",
+        "Moved",
         "OriginalPosition",
         "OriginalRotation",
         "Position",
@@ -44,11 +49,13 @@ public static class GameComponentsLookup {
         "Rotation",
         "Target",
         "TargetSwitch",
-        "View",
-        "WaitingUserInput"
+        "UI",
+        "UserInput",
+        "View"
     };
 
     public static readonly System.Type[] componentTypes = {
+        typeof(ActiveCharacterComponent),
         typeof(CharacterComponent),
         typeof(CharacterHitComponent),
         typeof(CharacterStateComponent),
@@ -56,15 +63,16 @@ public static class GameComponentsLookup {
         typeof(DamageComponent),
         typeof(GameStateComponent),
         typeof(HealthComponent),
+        typeof(MovedComponent),
         typeof(OriginalPositionComponent),
         typeof(OriginalRotationComponent),
         typeof(PositionComponent),
         typeof(PrefabComponent),
-        typeof(ReadyToAttackComponent),
         typeof(RotationComponent),
         typeof(TargetComponent),
         typeof(TargetSwitchComponent),
-        typeof(ViewComponent),
-        typeof(WaitingUserInputComponent)
+        typeof(UIComponent),
+        typeof(UserInputComponent),
+        typeof(ViewComponent)
     };
 }

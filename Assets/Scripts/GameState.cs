@@ -1,9 +1,9 @@
 public enum GameState
 {
-    NewRound,
-    WaitingForUser,
-    AfterUserPressAttack,
+    Initialize,
     Play,
-    WaitingForAnimationEnd,
+    WaitForUser,
+    AfterUserPressAttack,
+    WaitForMoveEnd,
     GameOver
 }

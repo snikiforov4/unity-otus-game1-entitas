@@ -33,7 +33,6 @@ public class CharacterStateUpdateSystem : IExecuteSystem
         switch (entity.characterState.value)
         {
             case CharacterState.Idle:
-                if (entity.hasTarget) entity.RemoveTarget();
                 entity.ReplaceRotation(entity.originalRotation.value);
                 GetAnimator(entity).SetFloat(Speed, 0.0f);
                 break;
@@ -45,7 +44,7 @@ public class CharacterStateUpdateSystem : IExecuteSystem
                     switch (entity.character.weapon)
                     {
                         case Weapon.Bat:
-                            UpdateState(entity, CharacterState.BeginAttack);
+                            UpdateState(entity, CharacterState.BeginMeleeAttack);
                             break;
 
                         case Weapon.Fist:
@@ -59,12 +58,9 @@ public class CharacterStateUpdateSystem : IExecuteSystem
 
                 break;
 
-            case CharacterState.BeginAttack:
+            case CharacterState.BeginMeleeAttack:
                 GetAnimator(entity).SetTrigger(MeleeAttack);
-                UpdateState(entity, CharacterState.Attack);
-                break;
-
-            case CharacterState.Attack:
+                UpdateState(entity, CharacterState.MeleeAttack);
                 break;
 
             case CharacterState.BeginShoot:
@@ -72,7 +68,14 @@ public class CharacterStateUpdateSystem : IExecuteSystem
                 UpdateState(entity, CharacterState.Shoot);
                 break;
 
+            case CharacterState.MeleeAttack:
             case CharacterState.Shoot:
+            case CharacterState.Punch:
+                break;
+            
+            case CharacterState.ShootEnd:
+                if (entity.isActiveCharacter) entity.isActiveCharacter = false;
+                UpdateState(entity, CharacterState.Shoot);
                 break;
 
             case CharacterState.BeginPunch:
@@ -80,13 +83,13 @@ public class CharacterStateUpdateSystem : IExecuteSystem
                 UpdateState(entity, CharacterState.Punch);
                 break;
 
-            case CharacterState.Punch:
-                break;
-
             case CharacterState.RunningFromEnemy:
                 GetAnimator(entity).SetFloat(Speed, RunSpeed);
                 if (RunTowards(entity, entity.originalPosition.value, 0.0f))
+                {
+                    if (entity.isActiveCharacter) entity.isActiveCharacter = false;
                     UpdateState(entity, CharacterState.Idle);
+                }
                 break;
 
             case CharacterState.BeginDying:
