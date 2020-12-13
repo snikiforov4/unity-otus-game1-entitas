@@ -14,7 +14,8 @@ public class CharacterEntity : AbstractEntity
         entity.AddOriginalRotation(transform.rotation);
         entity.AddPosition(transform.position);
         entity.AddRotation(transform.rotation);
-        entity.AddCharacter(characterType, CharacterState.Idle, weapon);
+        entity.AddCharacter(characterType, weapon);
+        entity.AddCharacterState(CharacterState.Idle);
         entity.AddPrefab(characterPrefab);
         entity.AddHealth(health);
         entity.isCurrentTarget = false;

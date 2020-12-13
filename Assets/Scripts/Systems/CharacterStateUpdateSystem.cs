@@ -2,7 +2,7 @@
 using Entitas;
 using UnityEngine;
 
-public class CharacterUpdateSystem : IExecuteSystem
+public class CharacterStateUpdateSystem : IExecuteSystem
 {
     private const float RunSpeed = 0.1f;
     private const float DistanceFromEnemy = 0.5f;
@@ -15,7 +15,7 @@ public class CharacterUpdateSystem : IExecuteSystem
 
     private readonly IGroup<GameEntity> _allCharacters;
 
-    public CharacterUpdateSystem(Contexts contexts)
+    public CharacterStateUpdateSystem(Contexts contexts)
     {
         _allCharacters = contexts.game.GetGroup(GameMatcher.Character);
     }
@@ -30,7 +30,7 @@ public class CharacterUpdateSystem : IExecuteSystem
 
     private void UpdateCharacter(GameEntity entity)
     {
-        switch (CharacterUtils.GetCharacterState(entity))
+        switch (entity.characterState.value)
         {
             case CharacterState.Idle:
                 if (entity.hasTarget) entity.RemoveTarget();
@@ -106,7 +106,7 @@ public class CharacterUpdateSystem : IExecuteSystem
 
     private void UpdateState(GameEntity entity, CharacterState state)
     {
-        entity.ReplaceCharacterStateTransition(state);
+        entity.ReplaceCharacterState(state);
     }
 
     private bool RunTowards(GameEntity character, Vector3 targetPosition, float distanceFromTarget)

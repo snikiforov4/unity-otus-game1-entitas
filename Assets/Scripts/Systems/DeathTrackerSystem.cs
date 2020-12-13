@@ -24,7 +24,7 @@ public class DeathTrackerSystem : ReactiveSystem<GameEntity>
         {
             if (CharacterUtils.IsNotDead(entity) && entity.health.value <= 0)
             {
-                entity.AddCharacterStateTransition(CharacterState.BeginDying);
+                entity.ReplaceCharacterState(CharacterState.BeginDying);
             }
         }
     }

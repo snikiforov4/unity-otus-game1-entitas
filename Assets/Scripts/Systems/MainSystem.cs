@@ -27,24 +27,24 @@ public class MainSystem : ReactiveSystem<GameEntity>
 
     protected override void Execute(List<GameEntity> entities)
     {
-        var gameStateEntity = entities.First();
-        switch (gameStateEntity.gameState.state)
+        var entity = entities.First();
+        switch (entity.gameState.state)
         {
             case GameState.NewRound:
-                NewRound(gameStateEntity);
+                NewRound(entity);
                 break;
             case GameState.Play:
-                Play(gameStateEntity);
+                Play(entity);
                 break;
             case GameState.AfterUserPressAttack:
                 _activeCharacter.isReadyToAttack = true;
-                gameStateEntity.ReplaceGameState(GameState.WaitingForAnimationEnd);
+                entity.ReplaceGameState(GameState.WaitingForAnimationEnd);
 
                 break;
             case GameState.WaitingForAnimationEnd:
                 if (!CharacterUtils.IsIdle(_activeCharacter))
                 {
-                    gameStateEntity.ReplaceGameState(GameState.Play);
+                    entity.ReplaceGameState(GameState.Play);
                 }
                 break;
             case GameState.WaitingForUser:

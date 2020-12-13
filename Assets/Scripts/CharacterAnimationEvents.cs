@@ -11,12 +11,12 @@ public class CharacterAnimationEvents : MonoBehaviour
 
     void ShootEnd()
     {
-        _entity.AddCharacterStateTransition(CharacterState.Idle);
+        _entity.ReplaceCharacterState(CharacterState.Idle);
     }
 
     void AttackEnd()
     {
-        _entity.AddCharacterStateTransition(CharacterState.RunningFromEnemy);
+        _entity.ReplaceCharacterState(CharacterState.RunningFromEnemy);
     }
 
     void Damage()

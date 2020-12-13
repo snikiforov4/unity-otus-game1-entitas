@@ -11,10 +11,11 @@ public class GameController : MonoBehaviour
 
         _systems = new Systems();
         _systems.Add(new PrefabInstantiateSystem(context));
-        _systems.Add(new TransformApplySystem(context));
+        _systems.Add(new ViewDestroySystem(context));
         _systems.Add(new MainSystem(context));
+        _systems.Add(new CharacterStateUpdateSystem(context));
         _systems.Add(new TargetPickerSystem(context));
-        _systems.Add(new AttackStarterSystem(context));
+        _systems.Add(new CharacterRoundMoveStarterSystem(context));
         _systems.Add(new HitTrackerSystem(context));
         _systems.Add(new DamageApplySystem(context));
         _systems.Add(new CharacterHealthIndicatorSystem(context));
@@ -22,8 +23,7 @@ public class GameController : MonoBehaviour
         _systems.Add(new CharacterTargetIndicatorSystem(context));
         _systems.Add(new DeathTrackerSystem(context));
         _systems.Add(new FinishGameTrackerSystem(context));
-        _systems.Add(new CharacterUpdateSystem(context));
-        _systems.Add(new CharacterNewStateApplySystem(context));
+        _systems.Add(new TransformApplySystem(context));
         _systems.Initialize();
     }
 

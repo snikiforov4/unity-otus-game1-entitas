@@ -20,12 +20,12 @@ public class FinishGameTrackerSystem : ReactiveSystem<GameEntity>
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
     {
         return context.CreateCollector(new TriggerOnEvent<GameEntity>(
-            GameMatcher.CharacterStateTransition, GroupEvent.AddedOrRemoved));
+            GameMatcher.CharacterState, GroupEvent.AddedOrRemoved));
     }
 
     protected override bool Filter(GameEntity entity)
     {
-        return entity.hasCharacter && entity.hasCharacterStateTransition;
+        return entity.hasCharacter && entity.hasCharacterState;
     }
 
     protected override void Execute(List<GameEntity> entities)
@@ -49,13 +49,7 @@ public class FinishGameTrackerSystem : ReactiveSystem<GameEntity>
 
     private bool HasAliveCharacters(ICollection<GameEntity> characters)
     {
-        return characters.Count > 0 && characters.Any(IsNotDead);
-    }
-
-    private static bool IsNotDead(GameEntity character)
-    {
-        var characterState = CharacterUtils.GetCharacterState(character);
-        return characterState != CharacterState.Dead;
+        return characters.Count > 0 && characters.Any(CharacterUtils.IsNotDead);
     }
 
     void PlayerWon()

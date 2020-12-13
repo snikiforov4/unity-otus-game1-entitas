@@ -10,7 +10,7 @@ public static class GameComponentsLookup {
 
     public const int Character = 0;
     public const int CharacterHit = 1;
-    public const int CharacterStateTransition = 2;
+    public const int CharacterState = 2;
     public const int CurrentTarget = 3;
     public const int Damage = 4;
     public const int GameState = 5;
@@ -31,7 +31,7 @@ public static class GameComponentsLookup {
     public static readonly string[] componentNames = {
         "Character",
         "CharacterHit",
-        "CharacterStateTransition",
+        "CharacterState",
         "CurrentTarget",
         "Damage",
         "GameState",
@@ -51,7 +51,7 @@ public static class GameComponentsLookup {
     public static readonly System.Type[] componentTypes = {
         typeof(CharacterComponent),
         typeof(CharacterHitComponent),
-        typeof(CharacterStateTransitionComponent),
+        typeof(CharacterStateComponent),
         typeof(CurrentTargetComponent),
         typeof(DamageComponent),
         typeof(GameStateComponent),

@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Entitas;
 
-public class AttackStarterSystem : ReactiveSystem<GameEntity>
+public class CharacterRoundMoveStarterSystem : ReactiveSystem<GameEntity>
 {
-    private readonly IGroup<GameEntity> _allCharacters;
-
-    public AttackStarterSystem(Contexts contexts)
+    public CharacterRoundMoveStarterSystem(Contexts contexts)
         : base(contexts.game)
     {
-        _allCharacters = contexts.game.GetGroup(GameMatcher.Character);
     }
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
@@ -34,11 +31,11 @@ public class AttackStarterSystem : ReactiveSystem<GameEntity>
         {
             case Weapon.Bat:
             case Weapon.Fist:
-                entity.AddCharacterStateTransition(CharacterState.RunningToEnemy);
+                entity.ReplaceCharacterState(CharacterState.RunningToEnemy);
                 break;
 
             case Weapon.Pistol:
-                entity.AddCharacterStateTransition(CharacterState.BeginShoot);
+                entity.ReplaceCharacterState(CharacterState.BeginShoot);
                 break;
 
             default:
