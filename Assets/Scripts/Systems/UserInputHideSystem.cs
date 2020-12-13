@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Entitas;
 
-public class UserInputVisibilitySystem : ReactiveSystem<GameEntity>
+public class UserInputHideSystem : ReactiveSystem<GameEntity>
 {
-    public UserInputVisibilitySystem(Contexts contexts)
+    public UserInputHideSystem(Contexts contexts)
         : base(contexts.game)
     {
     }

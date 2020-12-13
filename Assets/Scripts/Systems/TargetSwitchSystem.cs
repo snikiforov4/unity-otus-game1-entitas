@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Entitas;
-using UnityEditor;
 
 public class TargetSwitchSystem : ReactiveSystem<GameEntity>
 {
@@ -26,14 +24,14 @@ public class TargetSwitchSystem : ReactiveSystem<GameEntity>
     protected override void Execute(List<GameEntity> entities)
     {
         entities.ForEach(e => e.isTargetSwitch = false);
-        var enemies = CharacterUtils.FindAll(_allCharacters.AsEnumerable(), CharacterType.BadGuy);
+        var badGuys = CharacterUtils.FindBadGuys(_allCharacters.AsEnumerable());
         
-        var curTargetIdx = enemies.FindIndex(entity => entity.isCurrentTarget);
-        enemies.ForEach(entity => entity.isCurrentTarget = false);
+        var curTargetIdx = badGuys.FindIndex(entity => entity.isCurrentTarget);
+        badGuys.ForEach(entity => entity.isCurrentTarget = false);
 
-        for (int i = 1; i < enemies.Count; i++)
+        for (int i = 1; i < badGuys.Count; i++)
         {
-            var nextEnemy = enemies[(curTargetIdx + i) % enemies.Count];
+            var nextEnemy = badGuys[(curTargetIdx + i) % badGuys.Count];
             if (CharacterUtils.IsNotDead(nextEnemy))
             {
                 nextEnemy.isCurrentTarget = true;

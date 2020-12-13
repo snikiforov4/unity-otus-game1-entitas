@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour
         _systems.Add(new ViewDestroySystem(context));
         _systems.Add(new GameUISystem(context));
         _systems.Add(new GameCycleSystem(context));
-        _systems.Add(new UserInputVisibilitySystem(context));
+        _systems.Add(new UserInputHideSystem(context));
         _systems.Add(new CharacterStateUpdateSystem(context));
         _systems.Add(new TargetPickerSystem(context));
         _systems.Add(new CharacterMoveStartSystem(context));
@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
         _systems.Add(new CharacterHealthIndicatorSystem(context));
         _systems.Add(new TargetSwitchSystem(context));
         _systems.Add(new CharacterTargetIndicatorSystem(context));
+        _systems.Add(new CharacterTargetIndicatorHideSystem(context));
         _systems.Add(new DeathTrackerSystem(context));
         _systems.Add(new GameOverTrackerSystem(context));
         _systems.Add(new TransformApplySystem(context));
