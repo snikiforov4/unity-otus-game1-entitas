@@ -23,20 +23,21 @@ public class GameOverTrackerSystem : ReactiveSystem<GameEntity>
 
     protected override bool Filter(GameEntity entity)
     {
-        return entity.hasGameState && entity.gameState.state == GameState.GameOver;
+        return entity.hasGameState && entity.hasUI && entity.gameState.state == GameState.GameOver;
     }
 
     protected override void Execute(List<GameEntity> entities)
     {
+        var entity = entities.First();
         if (!HasAliveCharacters(CharacterUtils.FindAll(_allCharacters.AsEnumerable(), CharacterType.GoodGuy)))
         {
-            PlayerLost();
+            PlayerLost(entity);
             return;
         }
 
         if (!HasAliveCharacters(CharacterUtils.FindAll(_allCharacters.AsEnumerable(), CharacterType.BadGuy)))
         {
-            PlayerWon();
+            PlayerWon(entity);
         }
     }
 
@@ -45,27 +46,24 @@ public class GameOverTrackerSystem : ReactiveSystem<GameEntity>
         return characters.Count > 0 && characters.Any(CharacterUtils.IsNotDead);
     }
 
-    void PlayerWon()
+    void PlayerWon(GameEntity entity)
     {
-        Debug.Log("Won");
-        // SetGameResultTextColor(WinColor);
-        // gameResultText.text = "You Won";
-        // Utility.SetCanvasGroupEnabled(endGameCanvasGroup, true);
+        entity.uI.gameResultText.color = transformColor(WinColor);
+        entity.uI.gameResultText.text = "You Won";
+        Utility.SetCanvasGroupEnabled(entity.uI.gameControlsCanvasGroup, false);
+        Utility.SetCanvasGroupEnabled(entity.uI.endGameCanvasGroup, true);
     }
 
-    void PlayerLost()
+    void PlayerLost(GameEntity entity)
     {
-        Debug.Log("Lost");
-        // SetGameResultTextColor(LostColor);
-        // gameResultText.text = "You Lost";
-        // Utility.SetCanvasGroupEnabled(endGameCanvasGroup, true);
+        entity.uI.gameResultText.color = transformColor(LostColor);
+        entity.uI.gameResultText.text = "You Lost";
+        Utility.SetCanvasGroupEnabled(entity.uI.gameControlsCanvasGroup, false);
+        Utility.SetCanvasGroupEnabled(entity.uI.endGameCanvasGroup, true);
     }
 
-    private void SetGameResultTextColor(string hexColor)
+    private Color transformColor(string hexColor)
     {
-        // if (ColorUtility.TryParseHtmlString(hexColor, out Color newCol))
-        // {
-        // gameResultText.color = newCol;
-        // }
+        return ColorUtility.TryParseHtmlString(hexColor, out var newCol) ? newCol : Color.black;
     }
 }
